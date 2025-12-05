@@ -10,7 +10,11 @@ const BoardStack = createNativeStackNavigator<BoardStackParamList>();
 
 const BoardStackNavigator = () => {
   return (
-    <BoardStack.Navigator>
+    <BoardStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       <BoardStack.Screen name="BoardListScreen" component={BoardListScreen} />
       <BoardStack.Screen
         name="BoardDetailScreen"

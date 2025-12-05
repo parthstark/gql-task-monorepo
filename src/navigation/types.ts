@@ -10,6 +10,12 @@ export type BoardStackParamList = {
 };
 
 export type RootTabParamList = {
-  BoardsTab: undefined;
-  UsersTab: undefined;
+  BoardsTab: { screen?: keyof BoardStackParamList; params?: any };
+  UsersTab: { screen?: keyof UserStackParamList; params?: any };
 };
+
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList extends RootTabParamList {}
+  }
+}

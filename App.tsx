@@ -3,14 +3,20 @@ import { client } from './src/graphql/client';
 import { ApolloProvider } from '@apollo/client/react';
 import { NavigationContainer } from '@react-navigation/native';
 import TabNavigator from './src/navigation/TabNavigator';
+import { Provider as PaperProvider } from 'react-native-paper';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const App = () => {
   return (
-    <ApolloProvider client={client}>
-      <NavigationContainer>
-        <TabNavigator />
-      </NavigationContainer>
-    </ApolloProvider>
+    <PaperProvider
+      settings={{ icon: props => <MaterialCommunityIcons {...props} /> }}
+    >
+      <ApolloProvider client={client}>
+        <NavigationContainer>
+          <TabNavigator />
+        </NavigationContainer>
+      </ApolloProvider>
+    </PaperProvider>
   );
 };
 

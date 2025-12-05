@@ -9,7 +9,11 @@ const UserStack = createNativeStackNavigator<UserStackParamList>();
 
 const UserStackNavigator = () => {
   return (
-    <UserStack.Navigator>
+    <UserStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       <UserStack.Screen name="UserListScreen" component={UserListScreen} />
       <UserStack.Screen
         name="UserProfileScreen"
