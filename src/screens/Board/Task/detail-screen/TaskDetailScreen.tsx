@@ -55,6 +55,10 @@ const TaskDetailScreen = ({ route, navigation }: Props) => {
 
       {task && (
         <ScrollView style={styles.scrollContainer}>
+          <Text variant="titleLarge" style={styles.sectionTitle}>
+            Task Information
+          </Text>
+
           {/* Header Card */}
           <Card style={styles.card}>
             <Card.Title title={task.title} subtitle={`Key: ${task.key}`} />
@@ -81,6 +85,12 @@ const TaskDetailScreen = ({ route, navigation }: Props) => {
               </Chip>
             </Card.Content>
           </Card>
+
+          <Divider style={styles.sectionDivider} />
+
+          <Text variant="titleLarge" style={styles.sectionTitle}>
+            Assignment
+          </Text>
 
           {/* Assignee */}
           <Card style={styles.card}>
@@ -109,6 +119,12 @@ const TaskDetailScreen = ({ route, navigation }: Props) => {
             </Card.Content>
           </Card>
 
+          <Divider style={styles.sectionDivider} />
+
+          <Text variant="titleLarge" style={styles.sectionTitle}>
+            Sub Tasks
+          </Text>
+
           {/* Subtasks */}
           <Card style={styles.card}>
             <Card.Title title="Sub Tasks" />
@@ -133,6 +149,12 @@ const TaskDetailScreen = ({ route, navigation }: Props) => {
             </Card.Content>
           </Card>
 
+          <Divider style={styles.sectionDivider} />
+
+          <Text variant="titleLarge" style={styles.sectionTitle}>
+            Comments
+          </Text>
+
           {/* Comments */}
           <Card style={styles.card}>
             <Card.Title title="Comments" />
@@ -144,7 +166,7 @@ const TaskDetailScreen = ({ route, navigation }: Props) => {
                   <View key={cm.id} style={styles.commentContainer}>
                     <View style={styles.commentHeader}>
                       <Avatar.Text size={34} label={cm.author.name.charAt(0)} />
-                      <View style={{ marginLeft: 10 }}>
+                      <View style={styles.commentAuthorInfo}>
                         <Text style={styles.commentAuthor}>
                           {cm.author.name}
                         </Text>
@@ -152,7 +174,7 @@ const TaskDetailScreen = ({ route, navigation }: Props) => {
                       </View>
                     </View>
                     <Text style={styles.commentText}>{cm.text}</Text>
-                    <Divider style={{ marginVertical: 10 }} />
+                    <Divider style={styles.commentDivider} />
                   </View>
                 ))
               )}
@@ -202,5 +224,17 @@ const styles = StyleSheet.create({
   },
   commentText: {
     marginTop: 6,
+  },
+  commentAuthorInfo: {
+    marginLeft: 10,
+  },
+  commentDivider: {
+    marginVertical: 10,
+  },
+  sectionTitle: {
+    marginBottom: 12,
+  },
+  sectionDivider: {
+    marginVertical: 20,
   },
 });

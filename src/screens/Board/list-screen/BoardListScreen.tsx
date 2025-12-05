@@ -45,12 +45,17 @@ const BoardListScreen = ({ navigation }: Props) => {
 
       {Array.isArray(boards) && (
         <FlatList
-          contentContainerStyle={{ padding: 16 }}
+          contentContainerStyle={styles.listContainer}
+          ListHeaderComponent={
+            <Text variant="titleLarge" style={styles.sectionTitle}>
+              All Boards
+            </Text>
+          }
           data={boards}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
             <Card
-              style={{ marginBottom: 12, borderRadius: 14 }}
+              style={styles.boardCard}
               onPress={() =>
                 navigation.navigate('BoardDetailScreen', { boardKey: item.key })
               }
@@ -62,7 +67,7 @@ const BoardListScreen = ({ navigation }: Props) => {
                   <MaterialCommunityIcons
                     name="view-dashboard"
                     size={30}
-                    style={{ marginLeft: 10 }}
+                    style={styles.boardIcon}
                   />
                 )}
                 right={() => (
@@ -93,6 +98,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  listContainer: {
+    padding: 16,
+  },
+  boardCard: {
+    marginBottom: 12,
+    borderRadius: 14,
+  },
+  boardIcon: {
+    marginLeft: 10,
+  },
+  sectionTitle: {
+    marginBottom: 16,
   },
 });
 

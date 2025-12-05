@@ -7,6 +7,7 @@ import {
   Card,
   Text,
   IconButton,
+  Divider,
 } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -48,32 +49,36 @@ const BoardDetailScreen = ({ route, navigation }: Props) => {
 
       {board && (
         <FlatList
-          contentContainerStyle={{ padding: 16 }}
+          contentContainerStyle={styles.listContainer}
           ListHeaderComponent={
             <>
               {/* Board Header Card */}
-              <Card style={{ padding: 20, borderRadius: 16, marginBottom: 20 }}>
+              <Text variant="titleLarge" style={styles.sectionTitle}>
+                Board Details
+              </Text>
+
+              <Card style={styles.boardHeaderCard}>
                 <Text variant="headlineMedium">{board.title}</Text>
                 {board.description && (
-                  <Text style={{ marginTop: 8, color: '#666' }}>
+                  <Text style={styles.boardDescription}>
                     {board.description}
                   </Text>
                 )}
 
-                <Text style={{ marginTop: 12 }} variant="titleSmall">
+                <Text style={styles.ownerLabel} variant="titleSmall">
                   Owner
                 </Text>
-                <Text style={{ color: '#444' }}>{board.owner.name}</Text>
+                <Text style={styles.ownerName}>{board.owner.name}</Text>
               </Card>
 
-              <Text variant="titleLarge" style={{ marginBottom: 12 }}>
+              <Divider style={styles.divider} />
+
+              <Text variant="titleLarge" style={styles.sectionTitle}>
                 Tasks
               </Text>
 
               {board.tasks.length === 0 && (
-                <Text style={{ color: '#999', marginBottom: 20 }}>
-                  No tasks
-                </Text>
+                <Text style={styles.noTasks}>No tasks</Text>
               )}
             </>
           }
@@ -81,10 +86,7 @@ const BoardDetailScreen = ({ route, navigation }: Props) => {
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
             <Card
-              style={{
-                marginBottom: 12,
-                borderRadius: 14,
-              }}
+              style={styles.taskCard}
               onPress={() =>
                 navigation.navigate('TaskDetailScreen', {
                   taskKey: item.key,
@@ -98,7 +100,7 @@ const BoardDetailScreen = ({ route, navigation }: Props) => {
                   <MaterialCommunityIcons
                     name="clipboard-check"
                     size={28}
-                    style={{ marginLeft: 10 }}
+                    style={styles.taskIcon}
                   />
                 )}
                 right={() => (
@@ -129,6 +131,41 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  listContainer: {
+    padding: 16,
+  },
+  boardHeaderCard: {
+    padding: 20,
+    borderRadius: 16,
+    marginBottom: 20,
+  },
+  boardDescription: {
+    marginTop: 8,
+    color: '#666',
+  },
+  ownerLabel: {
+    marginTop: 12,
+  },
+  ownerName: {
+    color: '#444',
+  },
+  sectionTitle: {
+    marginBottom: 12,
+  },
+  divider: {
+    marginVertical: 20,
+  },
+  noTasks: {
+    color: '#999',
+    marginBottom: 20,
+  },
+  taskCard: {
+    marginBottom: 12,
+    borderRadius: 14,
+  },
+  taskIcon: {
+    marginLeft: 10,
   },
 });
 

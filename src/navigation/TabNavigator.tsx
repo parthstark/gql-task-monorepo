@@ -1,6 +1,6 @@
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RootTabParamList } from './types';
 import BoardStackNavigator from './stacks/BoardStackNavigator';
@@ -13,7 +13,7 @@ const TabNavigator = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: { backgroundColor: '#ffffff' },
+        tabBarStyle: styles.tabBar,
       }}
     >
       <Tab.Screen
@@ -39,5 +39,11 @@ const TabNavigator = () => {
     </Tab.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  tabBar: {
+    backgroundColor: '#ffffff',
+  },
+});
 
 export default TabNavigator;

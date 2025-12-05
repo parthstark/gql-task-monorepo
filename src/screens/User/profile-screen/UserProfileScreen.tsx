@@ -44,10 +44,7 @@ const UserProfileScreen = ({ route, navigation }: Props) => {
   };
 
   const renderBoard = ({ item }: any) => (
-    <Card
-      style={{ marginBottom: 12, borderRadius: 14 }}
-      onPress={() => navigateToBoard(item.key)}
-    >
+    <Card style={styles.itemCard} onPress={() => navigateToBoard(item.key)}>
       <Card.Title
         title={item.title}
         subtitle={item.key}
@@ -55,7 +52,7 @@ const UserProfileScreen = ({ route, navigation }: Props) => {
           <MaterialCommunityIcons
             name="view-dashboard"
             size={28}
-            style={{ marginLeft: 10 }}
+            style={styles.itemIcon}
           />
         )}
         right={() => (
@@ -76,10 +73,7 @@ const UserProfileScreen = ({ route, navigation }: Props) => {
   };
 
   const renderTask = ({ item }: any) => (
-    <Card
-      style={{ marginBottom: 12, borderRadius: 14 }}
-      onPress={() => navigateToTask(item.key)}
-    >
+    <Card style={styles.itemCard} onPress={() => navigateToTask(item.key)}>
       <Card.Title
         title={item.title}
         subtitle={`Status: ${item.status}`}
@@ -87,7 +81,7 @@ const UserProfileScreen = ({ route, navigation }: Props) => {
           <MaterialCommunityIcons
             name="clipboard-text"
             size={26}
-            style={{ marginLeft: 10 }}
+            style={styles.itemIcon}
           />
         )}
         right={() => (
@@ -121,24 +115,24 @@ const UserProfileScreen = ({ route, navigation }: Props) => {
       )}
 
       {user && (
-        <ScrollView style={{ padding: 16 }}>
+        <ScrollView style={styles.scrollContainer}>
           {/* User Header */}
-          <Card style={{ padding: 20, borderRadius: 16, marginBottom: 20 }}>
-            <View style={{ alignItems: 'center' }}>
+          <Card style={styles.userHeaderCard}>
+            <View style={styles.userHeaderContent}>
               <Avatar.Icon size={80} icon="account" />
 
-              <Text variant="headlineMedium" style={{ marginTop: 12 }}>
+              <Text variant="headlineMedium" style={styles.userName}>
                 {user.name}
               </Text>
 
-              <Text variant="bodyMedium" style={{ color: '#555' }}>
+              <Text variant="bodyMedium" style={styles.userEmail}>
                 {user.email}
               </Text>
             </View>
           </Card>
 
           {/* Boards Section */}
-          <Text variant="titleLarge" style={{ marginBottom: 10 }}>
+          <Text variant="titleLarge" style={styles.sectionTitle}>
             Boards
           </Text>
 
@@ -146,16 +140,14 @@ const UserProfileScreen = ({ route, navigation }: Props) => {
             data={user.boards}
             keyExtractor={item => item.id}
             renderItem={renderBoard}
-            ListEmptyComponent={
-              <Text style={{ color: '#999' }}>No boards</Text>
-            }
+            ListEmptyComponent={<Text style={styles.emptyText}>No boards</Text>}
             scrollEnabled={false}
           />
 
-          <Divider style={{ marginVertical: 20 }} />
+          <Divider style={styles.divider} />
 
           {/* Tasks Section */}
-          <Text variant="titleLarge" style={{ marginBottom: 10 }}>
+          <Text variant="titleLarge" style={styles.sectionTitle}>
             Assigned Tasks
           </Text>
 
@@ -163,7 +155,7 @@ const UserProfileScreen = ({ route, navigation }: Props) => {
             data={user.tasks}
             keyExtractor={item => item.id}
             renderItem={renderTask}
-            ListEmptyComponent={<Text style={{ color: '#999' }}>No tasks</Text>}
+            ListEmptyComponent={<Text style={styles.emptyText}>No tasks</Text>}
             scrollEnabled={false}
           />
         </ScrollView>
@@ -181,6 +173,39 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  scrollContainer: {
+    padding: 16,
+  },
+  userHeaderCard: {
+    padding: 20,
+    borderRadius: 16,
+    marginBottom: 20,
+  },
+  userHeaderContent: {
+    alignItems: 'center',
+  },
+  userName: {
+    marginTop: 12,
+  },
+  userEmail: {
+    color: '#555',
+  },
+  sectionTitle: {
+    marginBottom: 10,
+  },
+  emptyText: {
+    color: '#999',
+  },
+  divider: {
+    marginVertical: 20,
+  },
+  itemCard: {
+    marginBottom: 12,
+    borderRadius: 14,
+  },
+  itemIcon: {
+    marginLeft: 10,
   },
 });
 
