@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FlatList, View, StyleSheet } from 'react-native';
 import {
   ActivityIndicator,
@@ -14,10 +14,13 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery } from '@apollo/client/react';
 import { BoardStackParamList } from '../../../navigation/types';
 import { Board } from '../../../graphql/types/board';
+import AddBoardForm from './components/AddBoardForm';
 
 type Props = NativeStackScreenProps<BoardStackParamList, 'BoardListScreen'>;
 
 const BoardListScreen = ({ navigation }: Props) => {
+  const [showInputs, setShowInputs] = useState(false);
+  
   const { data, loading, error } = useQuery<{ boards?: Board[] }>(
     GET_ALL_BOARDS,
   );
@@ -29,7 +32,13 @@ const BoardListScreen = ({ navigation }: Props) => {
       {/* Appbar */}
       <Appbar.Header>
         <Appbar.Content title="Boards" />
+        <Appbar.Action
+          icon={showInputs ? 'close' : 'plus'}
+          onPress={() => setShowInputs(!showInputs)}
+        />
       </Appbar.Header>
+
+      {showInputs && <AddBoardForm onSuccess={() => setShowInputs(false)} />}
 
       {loading && (
         <View style={styles.center}>

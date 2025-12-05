@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { UserStackParamList } from '../../../navigation/types';
 import { useQuery } from '@apollo/client/react';
 import { Card, Text, ActivityIndicator, Appbar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { GET_ALL_USERS } from './GET_ALL_USERS';
+import { GET_ALL_USERS } from './queries/GET_ALL_USERS';
 import { User } from '../../../graphql/types/user';
+import AddUserForm from './components/AddUserForm';
 
 type Props = NativeStackScreenProps<UserStackParamList, 'UserListScreen'>;
 
 const UserListScreen = ({ navigation }: Props) => {
-  const { data, loading, error } = useQuery<{ users?: User[] }>(GET_ALL_USERS);
+  const [showInputs, setShowInputs] = useState(false);
 
+  const { data, loading, error } = useQuery<{ users?: User[] }>(GET_ALL_USERS);
   const { users } = data || {};
 
   return (
@@ -20,7 +22,13 @@ const UserListScreen = ({ navigation }: Props) => {
       {/* Appbar */}
       <Appbar.Header>
         <Appbar.Content title="Users" />
+        <Appbar.Action
+          icon={showInputs ? 'close' : 'plus'}
+          onPress={() => setShowInputs(!showInputs)}
+        />
       </Appbar.Header>
+
+      {showInputs && <AddUserForm onSuccess={() => setShowInputs(false)} />}
 
       {loading && (
         <View style={styles.center}>
@@ -38,7 +46,12 @@ const UserListScreen = ({ navigation }: Props) => {
         <FlatList
           data={users}
           keyExtractor={item => item.id}
-          contentContainerStyle={{ padding: 12 }}
+          contentContainerStyle={styles.listContainer}
+          ListHeaderComponent={
+            <Text variant="titleLarge" style={styles.sectionTitle}>
+              All Users
+            </Text>
+          }
           renderItem={({ item }) => (
             <Card
               style={styles.card}
@@ -86,5 +99,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  listContainer: {
+    padding: 12,
+  },
+  sectionTitle: {
+    marginBottom: 16,
   },
 });

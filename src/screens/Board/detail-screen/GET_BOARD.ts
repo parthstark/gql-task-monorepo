@@ -10,6 +10,7 @@ export const GET_BOARD = gql`
       owner {
         id
         name
+        email
       }
       tasks {
         id
