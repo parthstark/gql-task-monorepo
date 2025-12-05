@@ -1,180 +1,206 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { View, ScrollView, StyleSheet } from 'react-native';
 import {
-  View,
+  Appbar,
+  Card,
   Text,
+  Chip,
+  Divider,
+  Avatar,
+  List,
   ActivityIndicator,
-  TextInput,
-  Button,
-  ScrollView,
-  StyleSheet,
-} from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { BoardStackParamList } from '../../../../navigation/types';
-import { useMutation, useQuery } from '@apollo/client/react';
+} from 'react-native-paper';
 import { GET_TASK_BY_KEY } from './queries/GET_TASK_BY_KEY';
-import { ADD_COMMENT } from './mutations/ADD_COMMENT';
-import { ADD_SUBTASK } from './mutations/ADD_SUBTASK';
-import { UPDATE_TASK } from './mutations/UPDATE_TASK';
+import { useQuery } from '@apollo/client/react';
 import { Task } from '../../../../graphql/types/task';
+import { CompositeScreenProps } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import {
+  BoardStackParamList,
+  RootTabParamList,
+} from '../../../../navigation/types';
 
-type Props = NativeStackScreenProps<BoardStackParamList, 'TaskDetailScreen'>;
+type Props = CompositeScreenProps<
+  NativeStackScreenProps<BoardStackParamList, 'TaskDetailScreen'>,
+  BottomTabScreenProps<RootTabParamList>
+>;
 
-const TaskDetailScreen = ({ route }: Props) => {
+const TaskDetailScreen = ({ route, navigation }: Props) => {
   const { taskKey } = route.params;
+  const { data, loading, error } = useQuery<{ task?: Task }>(GET_TASK_BY_KEY, {
+    variables: { key: taskKey },
+  });
 
-  const { data, loading, error, refetch } = useQuery<{ task?: Task }>(
-    GET_TASK_BY_KEY,
-    {
-      variables: { key: taskKey },
-    },
-  );
-
-  const [updateTask] = useMutation<{}>(UPDATE_TASK, { onCompleted: refetch });
-  const [addSubtask] = useMutation<{}>(ADD_SUBTASK, { onCompleted: refetch });
-  const [addComment] = useMutation<{}>(ADD_COMMENT, { onCompleted: refetch });
-
-  const [title, setTitle] = useState('');
-  const [description, setDesc] = useState('');
-  const [status, setStatus] = useState('');
-  const [assigneeEmail, setAssignee] = useState('');
-
-  const [subTitle, setSubTitle] = useState('');
-  const [subAssignee, setSubAssignee] = useState('');
-
-  const [commentText, setCommentText] = useState('');
-  const [commentAuthor, setCommentAuthor] = useState('');
-
-  if (loading) return <ActivityIndicator />;
-  if (error || !data?.task) return <Text>Error loading task</Text>;
-
-  const { task } = data;
+  const { task } = data || {};
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.heading}>{task.title}</Text>
-      <Text>Status: {task.status}</Text>
-      <Text>Board: {task.board.title}</Text>
-      {task.assignee && <Text>Assignee: {task.assignee.name}</Text>}
+    <View style={styles.container}>
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.Content title="Task Details" />
+      </Appbar.Header>
 
-      {/* Update Task */}
-      <Text style={styles.section}>Update Task</Text>
-      <TextInput
-        placeholder="New Title"
-        value={title}
-        onChangeText={setTitle}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Description"
-        value={description}
-        onChangeText={setDesc}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Status"
-        value={status}
-        onChangeText={setStatus}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Assignee Email"
-        value={assigneeEmail}
-        onChangeText={setAssignee}
-        style={styles.input}
-      />
+      {loading && (
+        <View style={styles.center}>
+          <ActivityIndicator size="small" />
+        </View>
+      )}
 
-      <Button
-        title="Update Task"
-        onPress={() =>
-          updateTask({
-            variables: {
-              taskKey,
-              title,
-              description,
-              status,
-              assigneeEmail,
-            },
-          })
-        }
-      />
+      {error && (
+        <View style={styles.center}>
+          <Text>Error loading task</Text>
+        </View>
+      )}
 
-      {/* Subtasks */}
-      <Text style={styles.section}>Subtasks</Text>
-      {task.subTasks.map((st: any) => (
-        <Text key={st.id}>
-          • {st.title} ({st.status})
-        </Text>
-      ))}
+      {task && (
+        <ScrollView style={styles.scrollContainer}>
+          {/* Header Card */}
+          <Card style={styles.card}>
+            <Card.Title title={task.title} subtitle={`Key: ${task.key}`} />
+            <Card.Content>
+              <Text style={styles.label}>Status</Text>
+              <Chip style={styles.chip}>{task.status}</Chip>
 
-      <TextInput
-        placeholder="Subtask Title"
-        value={subTitle}
-        onChangeText={setSubTitle}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Assignee Email"
-        value={subAssignee}
-        onChangeText={setSubAssignee}
-        style={styles.input}
-      />
+              {task.description ? (
+                <>
+                  <Text style={styles.label}>Description</Text>
+                  <Text>{task.description}</Text>
+                </>
+              ) : null}
 
-      <Button
-        title="Add Subtask"
-        onPress={() =>
-          addSubtask({
-            variables: {
-              title: subTitle,
-              boardKey: task.board.key,
-              parentTaskKey: task.key,
-              assigneeEmail: subAssignee,
-            },
-          })
-        }
-      />
+              <Text style={styles.label}>Board</Text>
+              <Chip
+                onPress={() =>
+                  navigation.navigate('BoardDetailScreen', {
+                    boardKey: task.board.key,
+                  })
+                }
+              >
+                {task.board.title}
+              </Chip>
+            </Card.Content>
+          </Card>
 
-      {/* Comments */}
-      <Text style={styles.section}>Comments</Text>
-      {task.comments.map((c: any) => (
-        <Text key={c.id}>
-          • {c.text} — {c.author.name}
-        </Text>
-      ))}
+          {/* Assignee */}
+          <Card style={styles.card}>
+            <Card.Title title="Assignee" />
+            <Card.Content>
+              {task.assignee ? (
+                <List.Item
+                  title={task.assignee.name}
+                  description={task.assignee.email}
+                  left={() => (
+                    <Avatar.Text
+                      label={task.assignee?.name.charAt(0) ?? 'NA'}
+                      size={36}
+                    />
+                  )}
+                  onPress={() =>
+                    navigation.navigate('UsersTab', {
+                      screen: 'UserProfileScreen',
+                      params: { userEmail: task.assignee?.email },
+                    })
+                  }
+                />
+              ) : (
+                <Text>Unassigned</Text>
+              )}
+            </Card.Content>
+          </Card>
 
-      <TextInput
-        placeholder="Comment"
-        value={commentText}
-        onChangeText={setCommentText}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Author Email"
-        value={commentAuthor}
-        onChangeText={setCommentAuthor}
-        style={styles.input}
-      />
+          {/* Subtasks */}
+          <Card style={styles.card}>
+            <Card.Title title="Sub Tasks" />
+            <Card.Content>
+              {task.subTasks.length === 0 ? (
+                <Text>No sub tasks</Text>
+              ) : (
+                task.subTasks.map(st => (
+                  <List.Item
+                    key={st.id}
+                    title={st.title}
+                    description={st.status}
+                    left={() => <List.Icon icon="checkbox-marked-circle" />}
+                    onPress={() =>
+                      navigation.navigate('TaskDetailScreen', {
+                        taskKey: st.key,
+                      })
+                    }
+                  />
+                ))
+              )}
+            </Card.Content>
+          </Card>
 
-      <Button
-        title="Add Comment"
-        onPress={() =>
-          addComment({
-            variables: {
-              taskKey,
-              text: commentText,
-              authorEmail: commentAuthor,
-            },
-          })
-        }
-      />
-    </ScrollView>
+          {/* Comments */}
+          <Card style={styles.card}>
+            <Card.Title title="Comments" />
+            <Card.Content>
+              {task.comments.length === 0 ? (
+                <Text>No comments</Text>
+              ) : (
+                task.comments.map(cm => (
+                  <View key={cm.id} style={styles.commentContainer}>
+                    <View style={styles.commentHeader}>
+                      <Avatar.Text size={34} label={cm.author.name.charAt(0)} />
+                      <View style={{ marginLeft: 10 }}>
+                        <Text style={styles.commentAuthor}>
+                          {cm.author.name}
+                        </Text>
+                        <Text>{cm.author.email}</Text>
+                      </View>
+                    </View>
+                    <Text style={styles.commentText}>{cm.text}</Text>
+                    <Divider style={{ marginVertical: 10 }} />
+                  </View>
+                ))
+              )}
+            </Card.Content>
+          </Card>
+        </ScrollView>
+      )}
+    </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: { padding: 16 },
-  heading: { fontSize: 22, fontWeight: 'bold', marginBottom: 10 },
-  section: { marginTop: 20, fontSize: 18, fontWeight: '600' },
-  input: { borderWidth: 1, padding: 8, borderRadius: 6, marginVertical: 6 },
-});
-
 export default TaskDetailScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+  },
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  scrollContainer: {
+    padding: 12,
+  },
+  card: {
+    marginBottom: 16,
+  },
+  label: {
+    marginTop: 10,
+    fontWeight: 'bold',
+  },
+  chip: {
+    alignSelf: 'flex-start',
+    marginVertical: 6,
+  },
+  commentContainer: {
+    marginBottom: 10,
+  },
+  commentHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  commentAuthor: {
+    fontWeight: '600',
+  },
+  commentText: {
+    marginTop: 6,
+  },
+});
