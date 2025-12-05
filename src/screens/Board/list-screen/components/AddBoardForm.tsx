@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
+import { TextInput, Button, Text } from 'react-native-paper';
 import { useMutation } from '@apollo/client/react';
 import { ADD_BOARD } from '../mutations/ADD_BOARD';
 import { GET_ALL_BOARDS } from '../GET_ALL_BOARDS';
@@ -14,6 +14,7 @@ const AddBoardForm = ({ onSuccess }: AddBoardFormProps) => {
   const [key, setKey] = useState('');
   const [description, setDescription] = useState('');
   const [ownerEmail, setOwnerEmail] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const [addBoard, { loading }] = useMutation(ADD_BOARD, {
     refetchQueries: [{ query: GET_ALL_BOARDS }],
@@ -22,12 +23,17 @@ const AddBoardForm = ({ onSuccess }: AddBoardFormProps) => {
       setKey('');
       setDescription('');
       setOwnerEmail('');
+      setErrorMessage('');
       onSuccess();
+    },
+    onError: error => {
+      setErrorMessage(error.message || 'Failed to add board');
     },
   });
 
   const handleAddBoard = () => {
     if (title.trim() && key.trim() && ownerEmail.trim()) {
+      setErrorMessage('');
       addBoard({
         variables: {
           title: title.trim(),
@@ -70,6 +76,9 @@ const AddBoardForm = ({ onSuccess }: AddBoardFormProps) => {
         style={styles.input}
         dense
       />
+
+      {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
+
       <Button
         mode="contained"
         onPress={handleAddBoard}
@@ -92,6 +101,11 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 8,
+  },
+  errorText: {
+    color: '#ff0000',
+    fontSize: 12,
+    marginVertical: 4,
   },
 });
 

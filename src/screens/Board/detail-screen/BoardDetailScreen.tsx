@@ -197,9 +197,8 @@ const styles = StyleSheet.create({
     marginBottom: 18,
   },
   statusHeader: {
+    alignSelf: 'flex-end',
     marginBottom: 12,
-    fontWeight: '700',
-    color: '#222',
   },
   taskCard: {
     marginBottom: 12,
