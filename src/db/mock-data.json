@@ -1,0 +1,146 @@
+{
+  "users": [
+    {
+      "id": "user-1",
+      "name": "Alice Johnson",
+      "email": "alice@example.com"
+    },
+    {
+      "id": "user-2", 
+      "name": "Bob Smith",
+      "email": "bob@example.com"
+    },
+    {
+      "id": "user-3",
+      "name": "Carol Davis",
+      "email": "carol@example.com"
+    },
+    {
+      "id": "user-4",
+      "name": "David Wilson",
+      "email": "david@example.com"
+    },
+    {
+      "id": "user-5",
+      "name": "Emma Brown",
+      "email": "emma@example.com"
+    }
+  ],
+  "boards": [
+    {
+      "id": "board-1",
+      "title": "Frontend Development",
+      "key": "FE",
+      "ownerId": "user-1",
+      "taskCounter": 3,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "board-2",
+      "title": "Backend Development", 
+      "key": "BE",
+      "ownerId": "user-2",
+      "taskCounter": 3,
+      "createdAt": "2024-01-02T00:00:00.000Z"
+    },
+    {
+      "id": "board-3",
+      "title": "DevOps",
+      "key": "DEVOPS",
+      "ownerId": "user-3",
+      "taskCounter": 2,
+      "createdAt": "2024-01-03T00:00:00.000Z"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "task-1",
+      "key": "FE-1",
+      "title": "Setup React App",
+      "boardId": "board-1",
+      "assigneeId": "user-1",
+      "status": "DONE",
+      "createdAt": "2024-01-01T01:00:00.000Z",
+      "updatedAt": "2024-01-01T02:00:00.000Z",
+      "description": "Initialize React application with TypeScript"
+    },
+    {
+      "id": "task-2",
+      "key": "FE-2", 
+      "title": "Create Login Component",
+      "boardId": "board-1",
+      "assigneeId": "user-4",
+      "status": "IN_PROGRESS",
+      "createdAt": "2024-01-01T03:00:00.000Z",
+      "updatedAt": "2024-01-01T04:00:00.000Z",
+      "description": "Build user authentication form"
+    },
+    {
+      "id": "task-3",
+      "key": "FE-3",
+      "title": "Add Routing",
+      "boardId": "board-1", 
+      "assigneeId": "user-5",
+      "status": "TODO",
+      "createdAt": "2024-01-01T05:00:00.000Z",
+      "updatedAt": "2024-01-01T05:00:00.000Z",
+      "description": "Implement React Router for navigation"
+    },
+    {
+      "id": "task-4",
+      "key": "BE-1",
+      "title": "Setup Express Server",
+      "boardId": "board-2",
+      "assigneeId": "user-2",
+      "status": "DONE",
+      "createdAt": "2024-01-02T01:00:00.000Z",
+      "updatedAt": "2024-01-02T02:00:00.000Z",
+      "description": "Initialize Express.js server with middleware"
+    },
+    {
+      "id": "task-5",
+      "key": "BE-2",
+      "title": "Create User API",
+      "boardId": "board-2",
+      "assigneeId": "user-3",
+      "status": "IN_PROGRESS", 
+      "createdAt": "2024-01-02T03:00:00.000Z",
+      "updatedAt": "2024-01-02T04:00:00.000Z",
+      "description": "Build REST API for user management"
+    },
+    {
+      "id": "task-6",
+      "key": "BE-3",
+      "title": "Database Integration",
+      "boardId": "board-2",
+      "assigneeId": "user-1",
+      "status": "TODO",
+      "createdAt": "2024-01-02T05:00:00.000Z",
+      "updatedAt": "2024-01-02T05:00:00.000Z",
+      "description": "Connect to MongoDB database"
+    },
+    {
+      "id": "task-7",
+      "key": "DEVOPS-1",
+      "title": "Setup CI/CD Pipeline",
+      "boardId": "board-3",
+      "assigneeId": "user-3",
+      "status": "IN_PROGRESS",
+      "createdAt": "2024-01-03T01:00:00.000Z",
+      "updatedAt": "2024-01-03T02:00:00.000Z",
+      "description": "Configure GitHub Actions for deployment"
+    },
+    {
+      "id": "task-8",
+      "key": "DEVOPS-2",
+      "title": "Docker Configuration",
+      "boardId": "board-3",
+      "assigneeId": "user-4",
+      "status": "TODO",
+      "createdAt": "2024-01-03T03:00:00.000Z",
+      "updatedAt": "2024-01-03T03:00:00.000Z",
+      "description": "Create Dockerfile and docker-compose setup"
+    }
+  ],
+  "comments": []
+}

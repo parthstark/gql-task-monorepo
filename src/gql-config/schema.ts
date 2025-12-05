@@ -63,7 +63,6 @@ export const typeDefs = gql`
       parentTaskKey: String
     ): Task
     addComment(taskKey: String!, authorEmail: String!, text: String!): Comment
-
     updateTask(
       taskKey: String!
       title: String

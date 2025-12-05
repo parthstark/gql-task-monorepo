@@ -1,21 +1,10 @@
 import { ApolloServer } from "apollo-server";
 import { db } from "./db";
-import { typeDefs } from "./gql-config/schema";
-import { resolvers } from "./gql-config/resolvers";
+import { apolloConfig } from "./apollo-config";
 
 const start = async () => {
-  await db.read(); // initialize
-
-  const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    formatError: (err) => {
-      return {
-        message: err.message,
-        code: err.extensions?.code,
-      };
-    },
-  });
+  await db.read();
+  const server = new ApolloServer(apolloConfig);
   const { url } = await server.listen({ port: 4000 });
   console.log(`🚀 Server running at ${url}`);
 };
