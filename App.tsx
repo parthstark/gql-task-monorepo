@@ -1,8 +1,17 @@
 import React from 'react';
-import { View } from 'react-native';
+import { client } from './src/graphql/client';
+import { ApolloProvider } from '@apollo/client/react';
+import { NavigationContainer } from '@react-navigation/native';
+import TabNavigator from './src/navigation/TabNavigator';
 
-function App() {
-  return <View />;
-}
+const App = () => {
+  return (
+    <ApolloProvider client={client}>
+      <NavigationContainer>
+        <TabNavigator />
+      </NavigationContainer>
+    </ApolloProvider>
+  );
+};
 
 export default App;
