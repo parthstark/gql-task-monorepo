@@ -20,7 +20,7 @@ type Props = NativeStackScreenProps<BoardStackParamList, 'BoardListScreen'>;
 
 const BoardListScreen = ({ navigation }: Props) => {
   const [showInputs, setShowInputs] = useState(false);
-  
+
   const { data, loading, error } = useQuery<{ boards?: Board[] }>(
     GET_ALL_BOARDS,
   );
@@ -71,6 +71,7 @@ const BoardListScreen = ({ navigation }: Props) => {
             >
               <Card.Title
                 title={item.title}
+                titleStyle={styles.cardTitle}
                 subtitle={item.key}
                 left={() => (
                   <MaterialCommunityIcons
@@ -120,6 +121,9 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     marginBottom: 16,
+  },
+  cardTitle: {
+    fontSize: 18,
   },
 });
 

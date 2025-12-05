@@ -3,7 +3,13 @@ import { View, StyleSheet, FlatList } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { UserStackParamList } from '../../../navigation/types';
 import { useQuery } from '@apollo/client/react';
-import { Card, Text, ActivityIndicator, Appbar } from 'react-native-paper';
+import {
+  Card,
+  Text,
+  ActivityIndicator,
+  Appbar,
+  IconButton,
+} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { GET_ALL_USERS } from './queries/GET_ALL_USERS';
 import { User } from '../../../graphql/types/user';
@@ -55,7 +61,6 @@ const UserListScreen = ({ navigation }: Props) => {
           renderItem={({ item }) => (
             <Card
               style={styles.card}
-              mode="elevated"
               onPress={() =>
                 navigation.navigate('UserProfileScreen', {
                   userEmail: item.email,
@@ -65,11 +70,23 @@ const UserListScreen = ({ navigation }: Props) => {
               <Card.Title
                 title={item.name}
                 subtitle={item.email}
-                left={props => (
-                  <Icon {...props} name="account-circle" size={40} />
+                titleStyle={styles.cardTitle}
+                left={() => (
+                  <Icon
+                    name="account-circle"
+                    size={28}
+                    style={styles.userIcon}
+                  />
                 )}
-                right={props => (
-                  <Icon {...props} name="chevron-right" size={28} />
+                right={() => (
+                  <IconButton
+                    icon="chevron-right"
+                    onPress={() =>
+                      navigation.navigate('UserProfileScreen', {
+                        userEmail: item.email,
+                      })
+                    }
+                  />
                 )}
               />
             </Card>
@@ -101,9 +118,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   listContainer: {
-    padding: 12,
+    padding: 16,
   },
   sectionTitle: {
     marginBottom: 16,
+  },
+  userIcon: {
+    marginLeft: 10,
+  },
+  cardTitle: {
+    fontSize: 18,
   },
 });

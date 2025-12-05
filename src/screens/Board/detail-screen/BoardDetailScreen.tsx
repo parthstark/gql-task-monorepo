@@ -127,7 +127,7 @@ const BoardDetailScreen = ({ route, navigation }: Props) => {
                 >
                   <Card.Title
                     title={task.title}
-                    subtitle={`Status: ${task.status}`}
+                    titleStyle={styles.cardTitle}
                     left={() => (
                       <MaterialCommunityIcons
                         name={statusIcons[task.status] || 'clipboard-text'}
@@ -207,5 +207,8 @@ const styles = StyleSheet.create({
   },
   taskIcon: {
     marginLeft: 10,
+  },
+  cardTitle: {
+    fontSize: 18,
   },
 });
