@@ -7,13 +7,11 @@ import { useQuery } from '@apollo/client/react';
 import {
   ActivityIndicator,
   Avatar,
-  Card,
   Text,
-  IconButton,
   Divider,
   Appbar,
+  Card,
 } from 'react-native-paper';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {
   UserStackParamList,
@@ -21,6 +19,8 @@ import {
 } from '../../../navigation/types';
 import { GET_USER } from './GET_USER';
 import { User } from '../../../graphql/types/user';
+import BoardCard from '../../../components/BoardCard';
+import TaskCard from '../../../components/TaskCard';
 
 type Props = CompositeScreenProps<
   NativeStackScreenProps<UserStackParamList, 'UserProfileScreen'>,
@@ -44,25 +44,7 @@ const UserProfileScreen = ({ route, navigation }: Props) => {
   };
 
   const renderBoard = ({ item }: any) => (
-    <Card style={styles.itemCard} onPress={() => navigateToBoard(item.key)}>
-      <Card.Title
-        title={item.title}
-        subtitle={item.key}
-        left={() => (
-          <MaterialCommunityIcons
-            name="view-dashboard"
-            size={28}
-            style={styles.itemIcon}
-          />
-        )}
-        right={() => (
-          <IconButton
-            icon="chevron-right"
-            onPress={() => navigateToBoard(item.key)}
-          />
-        )}
-      />
-    </Card>
+    <BoardCard title={item.title} onPress={() => navigateToBoard(item.key)} />
   );
 
   const navigateToTask = (taskKey: string) => {
@@ -73,25 +55,11 @@ const UserProfileScreen = ({ route, navigation }: Props) => {
   };
 
   const renderTask = ({ item }: any) => (
-    <Card style={styles.itemCard} onPress={() => navigateToTask(item.key)}>
-      <Card.Title
-        title={item.title}
-        subtitle={`Status: ${item.status}`}
-        left={() => (
-          <MaterialCommunityIcons
-            name="clipboard-text"
-            size={26}
-            style={styles.itemIcon}
-          />
-        )}
-        right={() => (
-          <IconButton
-            icon="chevron-right"
-            onPress={() => navigateToTask(item.key)}
-          />
-        )}
-      />
-    </Card>
+    <TaskCard
+      title={item.title}
+      status={item.status}
+      onPress={() => navigateToTask(item.key)}
+    />
   );
 
   return (
@@ -191,13 +159,6 @@ const styles = StyleSheet.create({
   },
   divider: {
     marginVertical: 20,
-  },
-  itemCard: {
-    marginBottom: 12,
-    borderRadius: 14,
-  },
-  itemIcon: {
-    marginLeft: 10,
   },
 });
 

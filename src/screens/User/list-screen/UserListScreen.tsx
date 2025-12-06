@@ -14,6 +14,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { GET_ALL_USERS } from './queries/GET_ALL_USERS';
 import { User } from '../../../graphql/types/user';
 import AddUserForm from './components/AddUserForm';
+import UserCard from '../../../components/UserCard';
 
 type Props = NativeStackScreenProps<UserStackParamList, 'UserListScreen'>;
 
@@ -59,37 +60,15 @@ const UserListScreen = ({ navigation }: Props) => {
             </Text>
           }
           renderItem={({ item }) => (
-            <Card
-              style={styles.card}
+            <UserCard
+              name={item.name}
+              email={item.email}
               onPress={() =>
                 navigation.navigate('UserProfileScreen', {
                   userEmail: item.email,
                 })
               }
-            >
-              <Card.Title
-                title={item.name}
-                subtitle={item.email}
-                titleStyle={styles.cardTitle}
-                left={() => (
-                  <Icon
-                    name="account-circle"
-                    size={28}
-                    style={styles.userIcon}
-                  />
-                )}
-                right={() => (
-                  <IconButton
-                    icon="chevron-right"
-                    onPress={() =>
-                      navigation.navigate('UserProfileScreen', {
-                        userEmail: item.email,
-                      })
-                    }
-                  />
-                )}
-              />
-            </Card>
+            />
           )}
         />
       )}
@@ -128,5 +107,8 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 18,
+  },
+  cardSubTitle: {
+    fontSize: 12,
   },
 });

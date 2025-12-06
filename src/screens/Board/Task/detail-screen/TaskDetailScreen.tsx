@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
+import { View, ScrollView, StyleSheet, FlatList } from 'react-native';
 import {
   Appbar,
   Card,
@@ -7,7 +7,6 @@ import {
   Chip,
   Divider,
   Avatar,
-  List,
   ActivityIndicator,
 } from 'react-native-paper';
 import { GET_TASK_BY_KEY } from './queries/GET_TASK_BY_KEY';
@@ -20,6 +19,8 @@ import {
   BoardStackParamList,
   RootTabParamList,
 } from '../../../../navigation/types';
+import TaskCard from '../../../../components/TaskCard';
+import UserCard from '../../../../components/UserCard';
 
 type Props = CompositeScreenProps<
   NativeStackScreenProps<BoardStackParamList, 'TaskDetailScreen'>,
@@ -61,19 +62,21 @@ const TaskDetailScreen = ({ route, navigation }: Props) => {
 
           {/* Header Card */}
           <Card style={styles.card}>
-            <Card.Title title={task.title} subtitle={`Key: ${task.key}`} />
             <Card.Content>
-              <Text style={styles.label}>Status</Text>
-              <Chip style={styles.chip}>{task.status}</Chip>
-
-              {task.description ? (
-                <>
-                  <Text style={styles.label}>Description</Text>
-                  <Text>{task.description}</Text>
-                </>
-              ) : null}
-
-              <Text style={styles.label}>Board</Text>
+              <View style={styles.taskInfoRow}>
+                <View>
+                  <Text style={styles.taskKey}>{task.key}</Text>
+                  <Text>{task.title}</Text>
+                </View>
+                <Chip style={styles.chip}>
+                  <View style={styles.chipStyle}>
+                    <Text>{task.status}</Text>
+                  </View>
+                </Chip>
+              </View>
+              {task.description && (
+                <Text style={styles.taskDescription}>{task.description}</Text>
+              )}
               <Chip
                 onPress={() =>
                   navigation.navigate('BoardDetailScreen', {
@@ -81,7 +84,9 @@ const TaskDetailScreen = ({ route, navigation }: Props) => {
                   })
                 }
               >
-                {task.board.title}
+                <View style={styles.chipStyle}>
+                  <Text>{task.board.title}</Text>
+                </View>
               </Chip>
             </Card.Content>
           </Card>
@@ -89,35 +94,23 @@ const TaskDetailScreen = ({ route, navigation }: Props) => {
           <Divider style={styles.sectionDivider} />
 
           <Text variant="titleLarge" style={styles.sectionTitle}>
-            Assignment
+            Assignee
           </Text>
+          {!task.assignee && <Text>Unassigned</Text>}
 
           {/* Assignee */}
-          <Card style={styles.card}>
-            <Card.Title title="Assignee" />
-            <Card.Content>
-              {task.assignee ? (
-                <List.Item
-                  title={task.assignee.name}
-                  description={task.assignee.email}
-                  left={() => (
-                    <Avatar.Text
-                      label={task.assignee?.name.charAt(0) ?? 'NA'}
-                      size={36}
-                    />
-                  )}
-                  onPress={() =>
-                    navigation.navigate('UsersTab', {
-                      screen: 'UserProfileScreen',
-                      params: { userEmail: task.assignee?.email },
-                    })
-                  }
-                />
-              ) : (
-                <Text>Unassigned</Text>
-              )}
-            </Card.Content>
-          </Card>
+          {task.assignee && (
+            <UserCard
+              name={task.assignee.name}
+              email={task.assignee.email}
+              onPress={() =>
+                navigation.navigate('UsersTab', {
+                  screen: 'UserProfileScreen',
+                  params: { userEmail: task.assignee?.email },
+                })
+              }
+            />
+          )}
 
           <Divider style={styles.sectionDivider} />
 
@@ -126,60 +119,50 @@ const TaskDetailScreen = ({ route, navigation }: Props) => {
           </Text>
 
           {/* Subtasks */}
-          <Card style={styles.card}>
-            <Card.Title title="Sub Tasks" />
-            <Card.Content>
-              {task.subTasks.length === 0 ? (
-                <Text>No sub tasks</Text>
-              ) : (
-                task.subTasks.map(st => (
-                  <List.Item
-                    key={st.id}
-                    title={st.title}
-                    description={st.status}
-                    left={() => <List.Icon icon="checkbox-marked-circle" />}
-                    onPress={() =>
-                      navigation.navigate('TaskDetailScreen', {
-                        taskKey: st.key,
-                      })
-                    }
-                  />
-                ))
-              )}
-            </Card.Content>
-          </Card>
+          {task.subTasks.length === 0 && <Text>No sub tasks</Text>}
+          <FlatList
+            data={task.subTasks}
+            keyExtractor={item => item.id}
+            renderItem={({ item }) => (
+              <TaskCard
+                title={item.title}
+                status={item.status}
+                onPress={() =>
+                  navigation.navigate('TaskDetailScreen', {
+                    taskKey: item.key,
+                  })
+                }
+              />
+            )}
+            scrollEnabled={false}
+          />
 
           <Divider style={styles.sectionDivider} />
 
           <Text variant="titleLarge" style={styles.sectionTitle}>
             Comments
           </Text>
+          {task.comments.length === 0 && <Text>No comments</Text>}
 
           {/* Comments */}
-          <Card style={styles.card}>
-            <Card.Title title="Comments" />
-            <Card.Content>
-              {task.comments.length === 0 ? (
-                <Text>No comments</Text>
-              ) : (
-                task.comments.map(cm => (
-                  <View key={cm.id} style={styles.commentContainer}>
-                    <View style={styles.commentHeader}>
-                      <Avatar.Text size={34} label={cm.author.name.charAt(0)} />
-                      <View style={styles.commentAuthorInfo}>
-                        <Text style={styles.commentAuthor}>
-                          {cm.author.name}
-                        </Text>
-                        <Text>{cm.author.email}</Text>
-                      </View>
-                    </View>
-                    <Text style={styles.commentText}>{cm.text}</Text>
-                    <Divider style={styles.commentDivider} />
+          <FlatList
+            data={task.comments}
+            keyExtractor={item => item.id}
+            renderItem={({ item }) => (
+              <View style={styles.commentContainer}>
+                <View style={styles.commentHeader}>
+                  <Avatar.Text size={34} label={item.author.name.charAt(0)} />
+                  <View style={styles.commentAuthorInfo}>
+                    <Text style={styles.commentAuthor}>{item.author.name}</Text>
+                    <Text variant="bodySmall">{item.author.email}</Text>
                   </View>
-                ))
-              )}
-            </Card.Content>
-          </Card>
+                </View>
+                <Text style={styles.commentText}>{item.text}</Text>
+                <Divider style={styles.commentDivider} />
+              </View>
+            )}
+            scrollEnabled={false}
+          />
         </ScrollView>
       )}
     </View>
@@ -192,6 +175,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
+    paddingBottom: 20,
   },
   center: {
     flex: 1,
@@ -204,12 +188,8 @@ const styles = StyleSheet.create({
   card: {
     marginBottom: 16,
   },
-  label: {
-    marginTop: 10,
-    fontWeight: 'bold',
-  },
   chip: {
-    alignSelf: 'flex-start',
+    width: '40%',
     marginVertical: 6,
   },
   commentContainer: {
@@ -236,5 +216,23 @@ const styles = StyleSheet.create({
   },
   sectionDivider: {
     marginVertical: 20,
+  },
+  chipStyle: {
+    width: '100%',
+    alignItems: 'center',
+    paddingTop: 6,
+  },
+  taskInfoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  taskKey: {
+    fontSize: 18,
+  },
+  taskDescription: {
+    fontSize: 10,
+    marginVertical: 8,
+    marginBottom: 14,
   },
 });

@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
 import { FlatList, View, StyleSheet } from 'react-native';
-import {
-  ActivityIndicator,
-  Appbar,
-  Card,
-  Text,
-  IconButton,
-} from 'react-native-paper';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { ActivityIndicator, Appbar, Text } from 'react-native-paper';
 
 import { GET_ALL_BOARDS } from './GET_ALL_BOARDS';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -15,6 +8,7 @@ import { useQuery } from '@apollo/client/react';
 import { BoardStackParamList } from '../../../navigation/types';
 import { Board } from '../../../graphql/types/board';
 import AddBoardForm from './components/AddBoardForm';
+import BoardCard from '../../../components/BoardCard';
 
 type Props = NativeStackScreenProps<BoardStackParamList, 'BoardListScreen'>;
 
@@ -63,35 +57,12 @@ const BoardListScreen = ({ navigation }: Props) => {
           data={boards}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
-            <Card
-              style={styles.boardCard}
+            <BoardCard
+              title={item.title}
               onPress={() =>
                 navigation.navigate('BoardDetailScreen', { boardKey: item.key })
               }
-            >
-              <Card.Title
-                title={item.title}
-                titleStyle={styles.cardTitle}
-                subtitle={item.key}
-                left={() => (
-                  <MaterialCommunityIcons
-                    name="view-dashboard"
-                    size={30}
-                    style={styles.boardIcon}
-                  />
-                )}
-                right={() => (
-                  <IconButton
-                    icon="chevron-right"
-                    onPress={() =>
-                      navigation.navigate('BoardDetailScreen', {
-                        boardKey: item.key,
-                      })
-                    }
-                  />
-                )}
-              />
-            </Card>
+            />
           )}
         />
       )}
@@ -112,18 +83,8 @@ const styles = StyleSheet.create({
   listContainer: {
     padding: 16,
   },
-  boardCard: {
-    marginBottom: 12,
-    borderRadius: 14,
-  },
-  boardIcon: {
-    marginLeft: 10,
-  },
   sectionTitle: {
     marginBottom: 16,
-  },
-  cardTitle: {
-    fontSize: 18,
   },
 });
 

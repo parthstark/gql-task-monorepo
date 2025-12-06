@@ -4,12 +4,9 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
   ActivityIndicator,
   Appbar,
-  Card,
   Text,
-  IconButton,
   Divider,
 } from 'react-native-paper';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {
   BoardStackParamList,
@@ -20,18 +17,12 @@ import { GET_BOARD } from './GET_BOARD';
 import { Board } from '../../../graphql/types/board';
 import { CompositeScreenProps } from '@react-navigation/native';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import TaskCard from '../../../components/TaskCard';
 
 type Props = CompositeScreenProps<
   NativeStackScreenProps<BoardStackParamList, 'BoardDetailScreen'>,
   BottomTabScreenProps<RootTabParamList>
 >;
-
-const statusIcons: Record<string, string> = {
-  TODO: 'clipboard-text-outline',
-  IN_PROGRESS: 'progress-clock',
-  DONE: 'check-circle-outline',
-  CANCELLED: 'close-circle-outline',
-};
 
 const BoardDetailScreen = ({ route, navigation }: Props) => {
   const { boardKey } = route.params;
@@ -116,37 +107,16 @@ const BoardDetailScreen = ({ route, navigation }: Props) => {
               </Text>
 
               {tasks.map(task => (
-                <Card
+                <TaskCard
                   key={task.id}
-                  style={styles.taskCard}
+                  title={task.title}
+                  status={task.status}
                   onPress={() =>
                     navigation.navigate('TaskDetailScreen', {
                       taskKey: task.key,
                     })
                   }
-                >
-                  <Card.Title
-                    title={task.title}
-                    titleStyle={styles.cardTitle}
-                    left={() => (
-                      <MaterialCommunityIcons
-                        name={statusIcons[task.status] || 'clipboard-text'}
-                        size={28}
-                        style={styles.taskIcon}
-                      />
-                    )}
-                    right={() => (
-                      <IconButton
-                        icon="chevron-right"
-                        onPress={() =>
-                          navigation.navigate('TaskDetailScreen', {
-                            taskKey: task.key,
-                          })
-                        }
-                      />
-                    )}
-                  />
-                </Card>
+                />
               ))}
             </View>
           ))}
@@ -199,15 +169,5 @@ const styles = StyleSheet.create({
   statusHeader: {
     alignSelf: 'flex-end',
     marginBottom: 12,
-  },
-  taskCard: {
-    marginBottom: 12,
-    borderRadius: 14,
-  },
-  taskIcon: {
-    marginLeft: 10,
-  },
-  cardTitle: {
-    fontSize: 18,
   },
 });
