@@ -125,9 +125,7 @@ const UserProfileScreen = ({ route, navigation }: Props) => {
                 {user.name}
               </Text>
 
-              <Text variant="bodyMedium" style={styles.userEmail}>
-                {user.email}
-              </Text>
+              <Text variant="bodyMedium">{user.email}</Text>
             </View>
           </Card>
 
@@ -140,7 +138,7 @@ const UserProfileScreen = ({ route, navigation }: Props) => {
             data={user.boards}
             keyExtractor={item => item.id}
             renderItem={renderBoard}
-            ListEmptyComponent={<Text style={styles.emptyText}>No boards</Text>}
+            ListEmptyComponent={<Text>No boards</Text>}
             scrollEnabled={false}
           />
 
@@ -155,7 +153,7 @@ const UserProfileScreen = ({ route, navigation }: Props) => {
             data={user.tasks}
             keyExtractor={item => item.id}
             renderItem={renderTask}
-            ListEmptyComponent={<Text style={styles.emptyText}>No tasks</Text>}
+            ListEmptyComponent={<Text>No tasks</Text>}
             scrollEnabled={false}
           />
         </ScrollView>
@@ -188,14 +186,8 @@ const styles = StyleSheet.create({
   userName: {
     marginTop: 12,
   },
-  userEmail: {
-    color: '#555',
-  },
   sectionTitle: {
     marginBottom: 10,
-  },
-  emptyText: {
-    color: '#999',
   },
   divider: {
     marginVertical: 20,

@@ -14,6 +14,7 @@ const TabNavigator = () => {
       screenOptions={{
         headerShown: false,
         tabBarStyle: styles.tabBar,
+        tabBarActiveTintColor: '#000000',
       }}
     >
       <Tab.Screen
@@ -42,7 +43,7 @@ const TabNavigator = () => {
 
 const styles = StyleSheet.create({
   tabBar: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#fffbfe',
   },
 });
 
