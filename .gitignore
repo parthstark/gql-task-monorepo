@@ -1,9 +1,13 @@
 node_modules/
 .vercel
 .env
+.env.local
 *.log
 web-build/
 dist/
 build/
 .DS_Store
-.env*.local
+
+# Vercel build artifacts (copied from backend)
+/api
+/src
