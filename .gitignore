@@ -8,6 +8,9 @@ dist/
 build/
 .DS_Store
 
-# Vercel build artifacts (copied from backend)
+# Build artifacts (copied during build script)
 /api
 /src
+package.json
+package-lock.json
+.env*.local
