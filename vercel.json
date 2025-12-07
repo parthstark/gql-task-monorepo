@@ -1,0 +1,10 @@
+{
+  "buildCommand": "cd frontend && npm install --legacy-peer-deps && npm run build:web",
+  "outputDirectory": "frontend/web-build",
+  "installCommand": "cd backend && npm install",
+  "functions": {
+    "api/graphql/index.ts": {
+      "maxDuration": 10
+    }
+  }
+}
