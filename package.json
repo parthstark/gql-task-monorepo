@@ -1,0 +1,16 @@
+{
+  "name": "gqltask-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "apollo-server-micro": "^3.13.0",
+    "apollo-server-core": "^3.13.0",
+    "graphql": "^16.12.0",
+    "lowdb": "^7.0.1",
+    "micro": "^9.3.4"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "typescript": "^5.9.3"
+  }
+}
