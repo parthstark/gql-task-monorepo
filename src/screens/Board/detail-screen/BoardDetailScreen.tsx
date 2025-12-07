@@ -6,6 +6,7 @@ import {
   Appbar,
   Text,
   Divider,
+  IconButton,
 } from 'react-native-paper';
 
 import {
@@ -51,7 +52,7 @@ const BoardDetailScreen = ({ route, navigation }: Props) => {
     <View style={styles.container}>
       {/* Header */}
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <IconButton icon="arrow-left" onPress={navigation.goBack} />
         <Appbar.Content title={board?.title || 'Board'} />
       </Appbar.Header>
 

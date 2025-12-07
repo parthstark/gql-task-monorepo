@@ -8,6 +8,7 @@ import {
   Divider,
   Avatar,
   ActivityIndicator,
+  IconButton,
 } from 'react-native-paper';
 import { GET_TASK_BY_KEY } from './queries/GET_TASK_BY_KEY';
 import { useQuery } from '@apollo/client/react';
@@ -38,7 +39,7 @@ const TaskDetailScreen = ({ route, navigation }: Props) => {
   return (
     <View style={styles.container}>
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <IconButton icon="arrow-left" onPress={navigation.goBack} />
         <Appbar.Content title="Task Details" />
       </Appbar.Header>
 
@@ -220,7 +221,6 @@ const styles = StyleSheet.create({
   chipStyle: {
     width: '100%',
     alignItems: 'center',
-    paddingTop: 6,
   },
   taskInfoRow: {
     flexDirection: 'row',

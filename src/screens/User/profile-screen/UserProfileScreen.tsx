@@ -11,6 +11,7 @@ import {
   Divider,
   Appbar,
   Card,
+  IconButton,
 } from 'react-native-paper';
 
 import {
@@ -66,7 +67,7 @@ const UserProfileScreen = ({ route, navigation }: Props) => {
     <View style={styles.container}>
       {/* Appbar */}
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <IconButton icon="arrow-left" onPress={navigation.goBack} />
         <Appbar.Content title="Profile" />
       </Appbar.Header>
 

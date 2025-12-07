@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Card, IconButton } from 'react-native-paper';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from './Icon';
 
 interface BoardCardProps {
   title: string;
@@ -15,7 +15,7 @@ const BoardCard = ({ title, onPress }: BoardCardProps) => {
         title={title}
         titleStyle={styles.title}
         left={() => (
-          <MaterialCommunityIcons
+          <Icon
             name="view-dashboard"
             size={30}
             style={styles.icon}

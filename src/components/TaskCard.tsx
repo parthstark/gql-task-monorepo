@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Card, IconButton } from 'react-native-paper';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from './Icon';
 
 interface TaskCardProps {
   title: string;
@@ -23,7 +23,7 @@ const TaskCard = ({ title, status, onPress }: TaskCardProps) => {
         title={title}
         titleStyle={styles.title}
         left={() => (
-          <MaterialCommunityIcons
+          <Icon
             name={statusIcons[status] || 'clipboard-text'}
             size={28}
             style={styles.icon}

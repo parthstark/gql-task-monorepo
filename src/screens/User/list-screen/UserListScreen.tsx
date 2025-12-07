@@ -3,14 +3,7 @@ import { View, StyleSheet, FlatList } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { UserStackParamList } from '../../../navigation/types';
 import { useQuery } from '@apollo/client/react';
-import {
-  Card,
-  Text,
-  ActivityIndicator,
-  Appbar,
-  IconButton,
-} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Text, ActivityIndicator, Appbar } from 'react-native-paper';
 import { GET_ALL_USERS } from './queries/GET_ALL_USERS';
 import { User } from '../../../graphql/types/user';
 import AddUserForm from './components/AddUserForm';

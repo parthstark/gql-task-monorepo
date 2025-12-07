@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from '../components/Icon';
 import { RootTabParamList } from './types';
 import BoardStackNavigator from './stacks/BoardStackNavigator';
 import UserStackNavigator from './stacks/UserStackNavigator';
