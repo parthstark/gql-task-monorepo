@@ -6,11 +6,5 @@
   },
   "env": {
     "IS_SERVERLESS": "true"
-  },
-  "redirects": [
-    {
-      "source": "/",
-      "destination": "/api/graphql"
-    }
-  ]
+  }
 }
