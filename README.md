@@ -6,19 +6,10 @@ Single deployment for frontend and backend with full git history preserved.
 ```
 gqltask-monorepo/
 ├── frontend/          React Native Web app
-├── backend/           GraphQL API source
-├── api/               Copy of backend/api for Vercel
-├── src/               Copy of backend/src for Vercel
+├── backend/           GraphQL API (single source of truth)
 ├── package.json       Root dependencies (backend deps)
 └── vercel.json        Deployment config
 ```
-
-## Important Notes
-- `api/` and `src/` at root are copies from `backend/` (required by Vercel)
-- When updating backend code, edit in `backend/` then copy to root:
-  ```bash
-  cp -r backend/api . && cp -r backend/src .
-  ```
 
 ## Deployment
 ```bash
