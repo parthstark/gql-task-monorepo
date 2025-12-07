@@ -30,4 +30,7 @@ echo "📤 Deploying to Vercel..."
 # Deploy to Vercel
 npx vercel --prod --yes
 
+echo "🧹 Cleaning up..."
+rm -rf api src package.json package-lock.json node_modules
+
 echo "🎉 Deployment complete!"
