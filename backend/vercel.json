@@ -1,0 +1,10 @@
+{
+  "functions": {
+    "api/graphql/index.ts": {
+      "maxDuration": 10
+    }
+  },
+  "env": {
+    "IS_SERVERLESS": "true"
+  }
+}
