@@ -5,6 +5,7 @@ import Icon from '../components/Icon';
 import { RootTabParamList } from './types';
 import BoardStackNavigator from './stacks/BoardStackNavigator';
 import UserStackNavigator from './stacks/UserStackNavigator';
+import AboutScreen from '../screens/About/AboutScreen';
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
 
@@ -34,6 +35,16 @@ const TabNavigator = () => {
           title: 'Boards',
           tabBarIcon: ({ color, size }) => (
             <Icon name="view-dashboard" color={color} size={size} />
+          ),
+        })}
+      />
+      <Tab.Screen
+        name="AboutTab"
+        component={AboutScreen}
+        options={() => ({
+          title: 'About',
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="information" color={color} size={size} />
           ),
         })}
       />

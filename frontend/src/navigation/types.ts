@@ -12,6 +12,7 @@ export type BoardStackParamList = {
 export type RootTabParamList = {
   BoardsTab: { screen?: keyof BoardStackParamList; params?: any };
   UsersTab: { screen?: keyof UserStackParamList; params?: any };
+  AboutTab: undefined;
 };
 
 declare global {
