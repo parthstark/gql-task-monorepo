@@ -1,19 +1,10 @@
-import React, { useRef, useEffect, useMemo } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Animated,
-  Dimensions,
-  ViewStyle,
-} from 'react-native';
+import React, { useRef, useEffect, useMemo, useState } from 'react';
+import { View, Text, StyleSheet, Animated, ViewStyle } from 'react-native';
 import Svg, { Path, Defs, Marker, Polygon } from 'react-native-svg';
-
-const { width } = Dimensions.get('window');
-const BOX_WIDTH = 140;
-const BOX_HEIGHT = 70;
-const BOX_MARGIN = 80;
-const ARROW_GAP = 15;
+const BOX_WIDTH = 80;
+const BOX_HEIGHT = 40;
+const BOX_MARGIN = 40;
+const ARROW_GAP = 4;
 const ANIMATION_DURATION = 2000;
 const DASH_PATTERN = '5 5';
 const DASH_LENGTH = 10;
@@ -58,18 +49,25 @@ const ArrowMarker: React.FC = () => (
 
 const AnimatedDiagram: React.FC = () => {
   const animationValue = useRef(new Animated.Value(0)).current;
+  const [containerWidth, setContainerWidth] = useState(320);
 
   const getPathData = (start: Coordinate, end: Coordinate): string =>
     `M ${start.x} ${start.y} L ${end.x} ${end.y}`;
 
   const coords = useMemo(
     () => ({
-      user: { x: width / 2 - BOX_WIDTH - BOX_MARGIN / 2, y: 80 },
-      board: { x: width / 2 + BOX_MARGIN / 2, y: 80 },
-      task: { x: width / 2 - BOX_WIDTH - BOX_MARGIN / 2, y: 80 + BOX_HEIGHT + BOX_MARGIN },
-      comment: { x: width / 2 - BOX_WIDTH - BOX_MARGIN / 2, y: 80 + 2 * (BOX_HEIGHT + BOX_MARGIN) },
+      user: { x: containerWidth / 2 - BOX_WIDTH - BOX_MARGIN / 2, y: 40 },
+      board: { x: containerWidth / 2 + BOX_MARGIN / 2, y: 40 },
+      task: {
+        x: containerWidth / 2 - BOX_WIDTH - BOX_MARGIN / 2,
+        y: 40 + BOX_HEIGHT + BOX_MARGIN,
+      },
+      comment: {
+        x: containerWidth / 2 - BOX_WIDTH - BOX_MARGIN / 2,
+        y: 40 + 2 * (BOX_HEIGHT + BOX_MARGIN),
+      },
     }),
-    []
+    [containerWidth],
   );
 
   const paths = useMemo<PathData[]>(
@@ -77,33 +75,51 @@ const AnimatedDiagram: React.FC = () => {
       {
         id: 'user_board',
         d: getPathData(
-          { x: coords.user.x + BOX_WIDTH + ARROW_GAP, y: coords.user.y + BOX_HEIGHT / 2 },
-          { x: coords.board.x - ARROW_GAP, y: coords.board.y + BOX_HEIGHT / 2 }
+          {
+            x: coords.user.x + BOX_WIDTH + ARROW_GAP,
+            y: coords.user.y + BOX_HEIGHT / 2,
+          },
+          { x: coords.board.x - ARROW_GAP, y: coords.board.y + BOX_HEIGHT / 2 },
         ),
       },
       {
         id: 'task_user',
         d: getPathData(
           { x: coords.task.x + BOX_WIDTH / 2, y: coords.task.y - ARROW_GAP },
-          { x: coords.user.x + BOX_WIDTH / 2, y: coords.user.y + BOX_HEIGHT + ARROW_GAP }
+          {
+            x: coords.user.x + BOX_WIDTH / 2,
+            y: coords.user.y + BOX_HEIGHT + ARROW_GAP,
+          },
         ),
       },
       {
         id: 'task_comment',
         d: getPathData(
-          { x: coords.task.x + BOX_WIDTH / 2, y: coords.task.y + BOX_HEIGHT + ARROW_GAP },
-          { x: coords.comment.x + BOX_WIDTH / 2, y: coords.comment.y - ARROW_GAP }
+          {
+            x: coords.task.x + BOX_WIDTH / 2,
+            y: coords.task.y + BOX_HEIGHT + ARROW_GAP,
+          },
+          {
+            x: coords.comment.x + BOX_WIDTH / 2,
+            y: coords.comment.y - ARROW_GAP,
+          },
         ),
       },
       {
         id: 'board_task',
         d: getPathData(
-          { x: coords.board.x + BOX_WIDTH / 2, y: coords.board.y + BOX_HEIGHT + ARROW_GAP },
-          { x: coords.task.x + BOX_WIDTH + ARROW_GAP, y: coords.task.y + BOX_HEIGHT / 2 }
+          {
+            x: coords.board.x + BOX_WIDTH / 2,
+            y: coords.board.y + BOX_HEIGHT + ARROW_GAP,
+          },
+          {
+            x: coords.task.x + BOX_WIDTH + ARROW_GAP,
+            y: coords.task.y + BOX_HEIGHT / 2,
+          },
         ),
       },
     ],
-    [coords]
+    [coords],
   );
 
   useEffect(() => {
@@ -113,18 +129,24 @@ const AnimatedDiagram: React.FC = () => {
         toValue: 1,
         duration: ANIMATION_DURATION,
         useNativeDriver: false,
-        easing: (t) => t,
+        easing: t => t,
       }).start(animate);
     };
     animate();
   }, [animationValue]);
 
   return (
-    <View style={styles.container}>
+    <View
+      style={styles.container}
+      onLayout={event => {
+        const { width } = event.nativeEvent.layout;
+        setContainerWidth(width);
+      }}
+    >
       <View style={styles.svgContainer}>
         <Svg height="100%" width="100%">
           <ArrowMarker />
-          {paths.map((path) => (
+          {paths.map(path => (
             <AnimatedPath
               key={path.id}
               d={path.d}
@@ -160,7 +182,6 @@ const AnimatedDiagram: React.FC = () => {
   );
 };
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -188,7 +209,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   boxText: {
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: 'bold',
     color: '#333333',
   },

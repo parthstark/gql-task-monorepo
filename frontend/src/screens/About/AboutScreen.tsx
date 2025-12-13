@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   diagramContainer: {
-    height: 500,
+    height: 280,
     marginBottom: 32,
     backgroundColor: '#F7F7F7',
     borderRadius: 12,
